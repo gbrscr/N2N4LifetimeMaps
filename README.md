@@ -1,1 +1,1 @@
-# noise2noise_for_lifetime
+# Noise2Noise Image Reconstruction of Lifetime Maps in Halide Perovskite Thin Films

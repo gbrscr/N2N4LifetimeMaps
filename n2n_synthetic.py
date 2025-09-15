@@ -174,7 +174,7 @@ else:
 print("Starting N2N reconstruction")
 
 lambda_tv = .00001
-max_epochs = 50    # training epochs
+max_epochs = 50000    # training epochs
 lr = 0.005
 optimisation_method = 'Adam'
 mini_batch_size = 4
@@ -248,4 +248,5 @@ plt.savefig(output_dir / "jointplot_pw.png", dpi=300, bbox_inches='tight')
 joint_plot(regularized_results,ground_truth, (100,210),(-3,-0.5),20)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result,ground_truth, (100,210),(-3,-0.5),20)
+
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')

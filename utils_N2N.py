@@ -686,7 +686,7 @@ def create_teal_colormap(cmap_name='custom_teal_cmap'):
 
 
 
-def joint_plot(data, GT, ylim,xlim, bins):
+def joint_plot(data, ylim,xlim, bins, GT = None):
 
     # color1="#4CB391"
     color2 = "#448061"
@@ -694,9 +694,7 @@ def joint_plot(data, GT, ylim,xlim, bins):
     color4 = "#E74C3C"
     colors = ['#1abc9c', '#3498db', '#9b59b6','#f39c12', '#e74c3c']
 
-    G0 = ((GT[0].reshape(-1)))
-    G1 = ((-np.divide(1,GT[1].reshape(-1))))
-
+    
     # Create the teal colormap
     teal_cmap = create_teal_colormap()
     h = sns.jointplot( x=data[0].reshape(-1), y=-np.divide(1,data[1].reshape(-1)), kind = 'hex',color = color3, cmap = teal_cmap,marginal_kws=dict(bins = bins), ylim=ylim, xlim = xlim, joint_kws=dict())
@@ -713,19 +711,20 @@ def joint_plot(data, GT, ylim,xlim, bins):
     cbar.ax.yaxis.offsetText.set_position((2.6,1))
     cbar.ax.tick_params(labelsize=24)
     h.figure.legend(bbox_to_anchor=(1, 1), loc=2)
-    for  i in range(len(set(G0))):
-        x = list(set(G0))[i]
-        y = list(set(G1[G0==list(set(G0))[i]]))
-        h.ax_joint.plot(x,y,'o',ms=25 , mec=color4, mfc='none',mew=5,clip_on=False)
+
+    if GT is not None:
+        G0 = ((GT[0].reshape(-1)))
+        G1 = ((-np.divide(1,GT[1].reshape(-1))))
+        for  i in range(len(set(G0))):
+            x = list(set(G0))[i]
+            y = list(set(G1[G0==list(set(G0))[i]]))
+            h.ax_joint.plot(x,y,'o',ms=25 , mec=color4, mfc='none',mew=5,clip_on=False)
 
 
 
 # ============================================================================
 # DEVICE SETUP
 # ============================================================================
-
-
-
 
 def setup_device(prefer_cuda=True):
     """

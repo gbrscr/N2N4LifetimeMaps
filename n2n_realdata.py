@@ -164,9 +164,10 @@ plot_maps(
 
 
 
-joint_plot(np.stack((pointwise_results[0],np.minimum(-2e-3,pointwise_results[1]))), (470,540),(15,17),20)
+joint_plot(np.stack((pointwise_results[0],np.minimum(-1e-4,pointwise_results[1]))), (470,540),(15,17),20)
 plt.savefig(output_dir / "jointplot_pw.png", dpi=300, bbox_inches='tight')
 joint_plot(regularized_results, (470,540),(15,17),20)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result, (470,540),(15,17),20)
+
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')

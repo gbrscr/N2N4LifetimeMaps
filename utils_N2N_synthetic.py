@@ -1,18 +1,10 @@
 """
-
 THIS IS THE UTIL FILE FOR THE N2N RECONSTRUCTION.
 IT INVOLVES 
 
     - HUBER REGULARISATION
     - "FAKE" MINIBATCHING : at each epoch the loss is only computed over a single minibatch of data
     - SHUFFLING : at each epoch the set of target cubes is shuffled so each minibatch is different
-
-
-
-    ### TO BE DONE ###
-
-    - INCLUDE THE SOLUTIONS OF THE REGULARISED CASE IN THE DIRECTORY
-
 
 """
 import numpy as np
@@ -396,11 +388,12 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
     metrics = {
         'loss': [],
         'loss_rel_change': [1.0],
-        'nmse': [],
         'stv': [],
         'solution_rel_change': []
     }
 
+    if GT_a is not None and GT_b is not None:
+        metrics['nmse'] = []
 
     for epoch in tqdm(range(max_epochs)):
 
@@ -479,22 +472,26 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
             # LOSS / NMSE 
             ax01[0].semilogy(metrics['loss'], label = "Loss", color = 'tab:red')
             ax01[0].tick_params(axis='y', labelcolor='tab:red')
-            ax0bis = ax01[0].twinx()
-            ax0bis.semilogy(metrics['nmse'], label = "NMSE", color = 'tab:blue')
-            ax0bis.tick_params(axis='y', labelcolor='tab:blue')
-            ax01[0].set_title('LOSS / NMSE')
+            if GT_a is not None and GT_b is not None:
+                ax0bis = ax01[0].twinx()
+                ax0bis.semilogy(metrics['nmse'], label = "NMSE", color = 'tab:blue')
+                ax0bis.tick_params(axis='y', labelcolor='tab:blue')
+                ax01[0].set_title('LOSS / NMSE')
+            else:
+                ax01[0].set_title('LOSS')
             
             # STV
             ax01[1].semilogy(metrics['stv'])
-            ax01[1].axhline(y = STV_GT, color = 'r', linestyle = '-') 
+            if GT_a is not None and GT_b is not None:
+                ax01[1].axhline(y = STV_GT, color = 'r', linestyle = '-') 
             ax01[1].set_title('STV')
             
             # LOSS RELCHG / SOL RELCHG
-            ax01[2].semilogy(metrics['solution_rel_change'])
+            ax01[2].semilogy(metrics['solution_rel_change'],color = 'tab:purple')
             ax01[2].axhline(y = 1e-5, color = 'tab:purple', linestyle = '-') 
             ax01bis = ax01[2].twinx()
             ax01bis.semilogy(metrics['loss_rel_change'], label = "loss_relch", color = 'tab:red')
-            ax01bis.axhline(y = 1e-5, color = 'tab:pink', linestyle = '-') 
+            ax01bis.axhline(y = 1e-5, color = 'tab:red', linestyle = '-') 
             ax01[2].set_title('Relative Change')
             plt.savefig(output_dir / f"metrics_epoch_{epoch}.png", dpi=300, bbox_inches='tight')
             # plt.show()

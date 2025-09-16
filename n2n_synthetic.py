@@ -12,6 +12,10 @@ reconstruction methods including:
 
 The script loads artificial data cubes, adds noise, and performs reconstruction
 to estimate photoluminescence parameters (amplitude and lifetime).
+
+Author: [Your Name]
+License: MIT
+Date: [Current Date]
 """
 
 
@@ -170,7 +174,7 @@ else:
 print("Starting N2N reconstruction")
 
 lambda_tv = .00001
-max_epochs = 50000    # training epochs
+max_epochs = 50    # training epochs
 lr = 0.005
 optimisation_method = 'Adam'
 mini_batch_size = 4
@@ -210,14 +214,12 @@ plt.tight_layout()
     
 print("Generating comparison plots")
     
-
-
-plot_maps( 
+plot_maps(
             pointwise_results, 
             regularized_results,
             n2n_result,
             output_dir=output_dir,
-            GT = ground_truth,
+            GT= ground_truth
         )
 
   
@@ -237,14 +239,11 @@ plot_training_metrics(
             output_dir=output_dir
         )
 
-joint_plot(ground_truth,ground_truth, (100,210),(-3,-0.5),20)
+joint_plot(ground_truth (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_gt.png", dpi=300, bbox_inches='tight')
-joint_plot(np.stack((pointwise_results[0],np.minimum(-2e-3,pointwise_results[1]))),ground_truth, (10,480),(-10,12),20)
+joint_plot(np.stack((pointwise_results[0],np.minimum(-2e-3,pointwise_results[1]))) (10,480),(-10,12),20,ground_truth)
 plt.savefig(output_dir / "jointplot_pw.png", dpi=300, bbox_inches='tight')
-joint_plot(regularized_results,ground_truth, (100,210),(-3,-0.5),20)
+joint_plot(regularized_results (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
-joint_plot(n2n_result,ground_truth, (100,210),(-3,-0.5),20)
-
+joint_plot(n2n_result (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
-
-

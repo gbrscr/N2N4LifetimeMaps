@@ -212,12 +212,12 @@ print("Generating comparison plots")
     
 
 
-plot_maps(
-            ground_truth, 
+plot_maps( 
             pointwise_results, 
             regularized_results,
             n2n_result,
-            output_dir=output_dir
+            output_dir=output_dir,
+            GT = ground_truth,
         )
 
   
@@ -246,4 +246,5 @@ plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result,ground_truth, (100,210),(-3,-0.5),20)
 
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+
 

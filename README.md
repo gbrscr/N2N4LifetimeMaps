@@ -2,4 +2,4 @@
 
 ![image info](N2N.png)
 
-Codes and Info coming soon!
+Details coming soon!

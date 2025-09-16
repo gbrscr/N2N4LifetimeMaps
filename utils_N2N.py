@@ -525,9 +525,13 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
 
 color_list = ['tab:red','tab:green','tab:orange','tab:blue','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan', ('green', 0.3), "xkcd:sky blue", "xkcd:lavender", "xkcd:mauve", "xkcd:deep pink", "xkcd:yellow orange", "xkcd:jade", "xkcd:dusty green"]
 
-def plot_maps(GT, PW,REG, *n2n_results, output_dir = "."):
+def plot_maps( PW,REG, *n2n_results, output_dir = ".", GT=None):
     
-    methods = [("Ground Truth", GT), ("Pointwise", PW), ("Regularized", REG)]
+
+    methods = [ ("Pointwise", PW), ("Regularized", REG)]
+
+    if GT is not None:
+        methods.append(("Ground Truth", GT))
 
     for i, result in enumerate(n2n_results):
         method, lerRat, mBatch= list(filter(None,result[-1].split("_")))
@@ -552,8 +556,6 @@ def plot_maps(GT, PW,REG, *n2n_results, output_dir = "."):
 
         plt.savefig(Path(output_dir) / f"sol - {name}.png", dpi=300, bbox_inches='tight')
         # plt.show()
-
-
 
 def error_maps(GT, PW,REG, *n2n_results, output_dir = "."):
     

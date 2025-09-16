@@ -487,8 +487,8 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
             ax01[1].set_title('STV')
             
             # LOSS RELCHG / SOL RELCHG
-            ax01[2].semilogy(metrics['solution_rel_change'],color = 'tab:purple')
-            ax01[2].axhline(y = 1e-5, color = 'tab:purple', linestyle = '-') 
+            ax01[2].semilogy(metrics['solution_rel_change'],color = 'tab:blue')
+            ax01[2].axhline(y = 1e-5, color = 'tab:blue', linestyle = '-') 
             ax01bis = ax01[2].twinx()
             ax01bis.semilogy(metrics['loss_rel_change'], label = "loss_relch", color = 'tab:red')
             ax01bis.axhline(y = 1e-5, color = 'tab:red', linestyle = '-') 
@@ -508,9 +508,9 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
 
     fig, ax = plt.subplots(1, 2)
     plot_with_colorbar(a, mask, ax[0])
-    ax[0].set_title(f"$\\log(\\delta)$")
+    ax[0].set_title(f"$\\log(\\delta)$ - N2N")
     plot_with_colorbar(-1/b,mask,ax[1])
-    ax[1].set_title(f"$\\tau$")
+    ax[1].set_title(f"$\\tau$ - N2N")
     # plt.show()
     
     info_string = optimizer_type +"__"+str(lr)[2:] +"__" + str(mini_batch_size)

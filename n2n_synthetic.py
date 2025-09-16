@@ -12,10 +12,6 @@ reconstruction methods including:
 
 The script loads artificial data cubes, adds noise, and performs reconstruction
 to estimate photoluminescence parameters (amplitude and lifetime).
-
-Author: [Your Name]
-License: MIT
-Date: [Current Date]
 """
 
 
@@ -27,7 +23,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import torch
 import random
-from utils_N2N_synthetic import *
+from utils_N2N import *
 import os
 from pathlib import Path
 
@@ -250,3 +246,4 @@ plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result,ground_truth, (100,210),(-3,-0.5),20)
 
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+

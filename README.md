@@ -2,10 +2,11 @@
 
 Code for the paper "Noise2Noise Image Reconstruction of Lifetime Maps in Halide Perovskite Thin Films" published at EUSIPCO 2025.
 
-**Authors:** [Gabriele Scrivanti](https://gbrscr.github.io/)¹, [Luca Calatroni](https://sites.google.com/view/lucacalatroni/home)², [Stefania Cacovich]¹
+**Authors:** [Gabriele Scrivanti](https://gbrscr.github.io/)¹, [Luca Calatroni](https://sites.google.com/view/lucacalatroni/home)², [Stefania Cacovich](https://scholar.google.com/citations?user=oJQ85cgAAAAJ&hl=en)¹
 
 ¹ IPVF, UMR 9006, CNRS, École Polytechnique, IP Paris, Chimie ParisTech, PSL, Palaiseau, France  
 ² MaLGa Center, DIBRIS, Università di Genova & MMS, Istituto Italiano di Tecnologia, Genoa, Italy
+
 [Paper](https://eusipco2025.org/wp-content/uploads/pdfs/0001707.pdf)
 
 **Abstract:**

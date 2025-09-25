@@ -154,11 +154,10 @@ n2n_result = n2n(
     
 print("Generating comparison plots")
     
-plot_maps(
-            pointwise_results, 
-            regularized_results,
-            n2n_result,
+plot_maps(  n2n_result,
             output_dir=output_dir,
+            PW = pointwise_results, 
+            REG = regularized_results,
         )
 
 
@@ -171,3 +170,4 @@ plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result, (470,540),(15,17),20)
 
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+

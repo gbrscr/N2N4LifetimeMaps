@@ -525,10 +525,17 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
 
 color_list = ['tab:red','tab:green','tab:orange','tab:blue','tab:purple','tab:brown','tab:pink','tab:gray','tab:olive','tab:cyan', ('green', 0.3), "xkcd:sky blue", "xkcd:lavender", "xkcd:mauve", "xkcd:deep pink", "xkcd:yellow orange", "xkcd:jade", "xkcd:dusty green"]
 
-def plot_maps( PW,REG, *n2n_results, output_dir = ".", GT=None):
+
+def plot_maps(  *n2n_results, output_dir = ".", PW= None, REG = None,GT=None):
     
 
-    methods = [ ("Pointwise", PW), ("Regularized", REG)]
+    methods = [ ]
+
+    if PW is not None:
+        methods.append(("Pointwise", PW))
+        
+    if REG is not None:
+        methods.append(("Regularized", REG))
 
     if GT is not None:
         methods.append(("Ground Truth", GT))
@@ -556,6 +563,7 @@ def plot_maps( PW,REG, *n2n_results, output_dir = ".", GT=None):
 
         plt.savefig(Path(output_dir) / f"sol - {name}.png", dpi=300, bbox_inches='tight')
         # plt.show()
+
 
 def error_maps(GT, PW,REG, *n2n_results, output_dir = "."):
     
@@ -877,3 +885,4 @@ def pointwise_reconstruction(log_data, time_points):
             a_map[i, j] = np.real(coeffs[1])
     
     return a_map, b_map
+

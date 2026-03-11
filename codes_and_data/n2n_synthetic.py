@@ -238,14 +238,15 @@ plot_training_metrics(
             output_dir=output_dir
         )
 
-joint_plot(ground_truth (100,210),(-3,-0.5),20,ground_truth)
+joint_plot(ground_truth ,(100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_gt.png", dpi=300, bbox_inches='tight')
-joint_plot(np.stack((pointwise_results[0],np.minimum(-2e-3,pointwise_results[1]))) (10,480),(-10,12),20,ground_truth)
+joint_plot(np.stack((pointwise_results[0],np.minimum(-2e-3,pointwise_results[1]))) ,(10,480),(-10,12),20,ground_truth)
 plt.savefig(output_dir / "jointplot_pw.png", dpi=300, bbox_inches='tight')
-joint_plot(regularized_results (100,210),(-3,-0.5),20,ground_truth)
+joint_plot(regularized_results, (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
-joint_plot(n2n_result (100,210),(-3,-0.5),20,ground_truth)
+joint_plot(n2n_result, (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+
 
 
 

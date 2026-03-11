@@ -13,9 +13,9 @@ reconstruction methods including:
 The script loads artificial data cubes, adds noise, and performs reconstruction
 to estimate photoluminescence parameters (amplitude and lifetime).
 
-Author: [Your Name]
+Author: Gabriele Scrivanti
 License: MIT
-Date: [Current Date]
+Date: 11-03-2026
 """
 
 
@@ -246,5 +246,6 @@ joint_plot(regularized_results (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+
 
 

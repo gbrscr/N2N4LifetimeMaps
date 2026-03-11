@@ -131,7 +131,7 @@ plt.tight_layout()
 print("Computing pointwise reconstruction")
 input_data_np = noisy_data_torch.detach().cpu().numpy()
 a_pw, b_pw = pointwise_reconstruction(
-        input_data_np, time_ns[0, time_indices]
+        np.mean(input_data_np,0), time_ns[0, time_indices]
     )
     
 # Plot pointwise results
@@ -246,4 +246,5 @@ joint_plot(regularized_results (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_reg.png", dpi=300, bbox_inches='tight')
 joint_plot(n2n_result (100,210),(-3,-0.5),20,ground_truth)
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
+
 

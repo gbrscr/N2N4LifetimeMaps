@@ -129,11 +129,11 @@ plt.tight_layout()
 # ============================================
     
 print("Computing pointwise reconstruction")
-input_data_np = noisy_data_torch.detach().cpu().numpy()
-input_data_mean_np = np.mean(input_data_np,0)
-input_data_mean_log_np = np.real(np.log(input_data_mean_np))
+noisy_data_np = noisy_data_torch.detach().cpu().numpy()
+noisy_data_mean_np = np.mean(noisy_data_np,0)
+noisy_data_mean_log_np = np.real(np.log(noisy_data_mean_np))
 a_pw, b_pw = pointwise_reconstruction(
-        input_data_mean_log_np, time_ns[0, time_indices]
+        noisy_data_mean_log_np, time_ns[0, time_indices]
     )
     
 # Plot pointwise results

@@ -51,6 +51,7 @@ noisy_data_torch, time_torch, metadata = load_photoluminescence_dataset(
     time_indices=range(4, 11),  # chosen indices indices
     return_torch=True,
     cuda_flag=True,
+    log_transform = False, # to avoid problems with the mean
     verbose=True
 )
 
@@ -59,6 +60,9 @@ B,C,H,W = noisy_data_torch.shape
 
 input_index = random.randint(0,B-1)
 noisy_data_mean_np = np.mean(noisy_data_torch.detach().cpu().numpy(), axis = 0)
+# log transform:
+noisy_data_mean_np = np.maximum(1e-6, noisy_data_mean_np)
+noisy_data_mean_log_np = np.real(np.log(noisy_data_mean_np))
 time_np = time_torch.cpu().numpy()
 mask = []
 
@@ -68,7 +72,7 @@ mask = []
 print("Computing pointwise reconstruction")
 
 a_pw, b_pw = pointwise_reconstruction(
-        noisy_data_mean_np,time_np
+        noisy_data_mean_log_np,time_np
     )
    
 # Plot pointwise results
@@ -129,8 +133,12 @@ lr = 0.005
 optimisation_method = 'Adam'
 mini_batch_size = 4
 
+noisy_data_torch = torch.clamp(noisy_data_torch, min=1e-6)
+noisy_data_log_torch = torch.log(noisy_data_torch).real
+
+
 n2n_result = n2n(
-        noisy_data=noisy_data_torch,
+        noisy_data=noisy_data_log_torch,
         time_points0=time_torch,
         mask=mask,
         optimizer_type='Adam',

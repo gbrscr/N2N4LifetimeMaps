@@ -130,8 +130,10 @@ plt.tight_layout()
     
 print("Computing pointwise reconstruction")
 input_data_np = noisy_data_torch.detach().cpu().numpy()
+input_data_mean_np = np.mean(input_data_np,0)
+input_data_mean_log_np = np.real(np.log(input_data_mean_np))
 a_pw, b_pw = pointwise_reconstruction(
-        np.mean(input_data_np,0), time_ns[0, time_indices]
+        input_data_mean_log_np, time_ns[0, time_indices]
     )
     
 # Plot pointwise results
@@ -178,9 +180,10 @@ max_epochs = 5000    # training epochs
 lr = 0.005
 optimisation_method = 'Adam'
 mini_batch_size = 4
+noisy_data_log_torch = torch.log(noisy_data_torch).real
 
 n2n_result = n2n(
-        noisy_data=noisy_data_torch,
+        noisy_data=noisy_data_log_torch,
         time_points0=time_torch,
         mask=mask,
         optimizer_type='Adam',

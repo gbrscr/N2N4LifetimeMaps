@@ -815,12 +815,12 @@ def prepare_noisy_data(cube_data, time_indices, batch_size, noise_magnitude, dty
     noisy_cube = np.maximum(1e-6, cube_arranged[time_indices, :, :] + noise)
     
     # Apply log transform
-    log_cube = np.real(np.log(noisy_cube))
+    # log_cube = np.real(np.log(noisy_cube))
     
     # Convert to PyTorch tensor
-    log_cube_torch = torch.from_numpy(log_cube).type(dtype).detach()
+    noisy_cube_torch = torch.from_numpy(noisy_cube).type(dtype).detach()
     
-    return log_cube_torch
+    return noisy_cube_torch
 
 def load_regularized_solution(dataset_id, noise_magnitude, reg_id = 1, data_dir="."):
     """

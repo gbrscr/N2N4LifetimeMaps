@@ -64,6 +64,9 @@ noisy_data_mean_np = np.mean(noisy_data_torch.detach().cpu().numpy(), axis = 0)
 noisy_data_mean_np = np.maximum(1e-6, noisy_data_mean_np)
 noisy_data_mean_log_np = np.real(np.log(noisy_data_mean_np))
 time_np = time_torch.cpu().numpy()
+
+print("Time points: {time_np}")
+
 mask = []
 
 # ========================

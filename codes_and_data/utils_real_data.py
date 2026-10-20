@@ -266,7 +266,7 @@ def load_photoluminescence_dataset(
         gate_widths.append(infos["gw"])
         
         if verbose:
-            print(f"Processed time point {k+1}/{len(available_gate_delays)}: {real_time:.2f} ns")
+            print(f"Processed time point {k+1}/{len(available_gate_delays)}: {new_cube_time[-1]:.2f} ns")
     
     # Convert time to numpy array
     new_cube_time = np.array(new_cube_time)

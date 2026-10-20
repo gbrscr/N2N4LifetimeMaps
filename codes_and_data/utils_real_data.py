@@ -118,7 +118,7 @@ def load_photoluminescence_dataset(
     sample_id,
     experiment_name,
     experiment_noise_name,
-    laser_pulse_delay=722.88,
+    laser_pulse_delay=722.88, # to be changed accoroding to experiment s.t. the pulse is at 0 ns
     time_selection_limits=None,
     magnification=50,
     binning=1,
@@ -203,7 +203,7 @@ def load_photoluminescence_dataset(
     gate_widths = []
     
     for k, delay in enumerate(available_gate_delays):
-        
+
         # Load noise file
         selection_noise = [x and y for x, y in zip(
             list(sub_list_of_files.Experiment == experiment_noise_name),
@@ -247,6 +247,7 @@ def load_photoluminescence_dataset(
             n_frames, height, width = image.shape
             new_cube = np.zeros((n_frames, len(available_gate_delays), height, width))
             new_cube_noise = np.zeros((len(available_gate_delays), height, width))
+            gw0 = infos["gw"] / 2 # Initial gate width for time alignment
             first_file = False
         
         # Store noise
@@ -260,7 +261,7 @@ def load_photoluminescence_dataset(
         
         # Store processed data
         new_cube[:, k, :, :] = image_denoised
-        new_cube_time.append(real_time + infos["gw"] / 2)
+        new_cube_time.append(real_time + infos["gw"] / 2 - gw0)
         mean_pl_over_the_image.append(np.mean(image_denoised))
         gate_widths.append(infos["gw"])
         

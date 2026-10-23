@@ -34,7 +34,7 @@ def np_to_torch(img_np):
     """
     return torch.from_numpy(img_np)[None, :]
 
-def plot_with_colorbar(x, mask,ax,quantiles=None):
+def plot_with_colorbar(x, mask,ax,quantiles=None, shrink = 0.4):
     """
     Plot image with colorbar and proper scaling.
     
@@ -52,7 +52,7 @@ def plot_with_colorbar(x, mask,ax,quantiles=None):
         vmin,vmax = np.nanquantile(x, [0.005,0.995])
     im = ax.imshow(x_masked, cmap = 'viridis', vmin =vmin, vmax = vmax )
     ax.axis('off')    
-    plt.colorbar(im, ax=ax, shrink =0.4)
+    plt.colorbar(im, ax=ax, shrink =shrink)
 
 
 # ============================================================================
@@ -302,7 +302,7 @@ def forward(model, y_input):
 
 
 # N2N DENOISER
-def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs=10000, step_size=5000,gamma=0.8, GT_a=None ,GT_b=None, lambda_tv=0.0 , input_index=0, mini_batch_size=1, device = None, scale_flag = True, output_dir = "."):
+def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs=10000, step_size=5000,gamma=0.8, GT_a=None ,GT_b=None, lambda_tv=0.0 , input_index=0, mini_batch_size=1, device = None, scale_flag = True, output_dir = ".", plot_flag = True):
     """
     Train Noise2Noise denoiser for reconstruction.
     
@@ -326,7 +326,7 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
         tuple: Reconstructed channels A and B, and training metrics
     """
                     
-    PLOT_FLAG = True
+
     figsize = (10.5,3.5)
     if device is None:
         device = DEVICE
@@ -450,7 +450,7 @@ def n2n(noisy_data, time_points0,mask,optimizer_type='Adam', lr=1e-3, max_epochs
         stvPlotLine = 1
 
         # VISUALISATION
-        if epoch % 1000 == 0 and epoch>0 and PLOT_FLAG:
+        if epoch % 1000 == 0 and epoch>0 and plot_flag:
 
             scale_factor_np = scale_factor.detach().cpu().numpy().squeeze(0)
             output_np  = current_output.detach().cpu().numpy()
@@ -553,10 +553,10 @@ def plot_maps(  *n2n_results, output_dir = ".", PW= None, REG = None,GT=None):
     for i, (name, (a_data, b_data)) in enumerate(methods):
 
         fig, axes = plt.subplots(1, 2, figsize=(7.5, 2.5))
-        plot_with_colorbar(a_data, [], axes[ 0])
+        plot_with_colorbar(a_data, [], axes[ 0], shrink=1.0)
         axes[ 0].set_title(f"$\\log(\\delta)$ - {name}")
         
-        plot_with_colorbar(-1/b_data, [], axes[ 1])
+        plot_with_colorbar(-1/b_data, [], axes[ 1], shrink=1.0)
         axes[ 1].set_title(f"$\\tau$ - {name}")
     
         plt.tight_layout()
@@ -565,9 +565,17 @@ def plot_maps(  *n2n_results, output_dir = ".", PW= None, REG = None,GT=None):
         # plt.show()
 
 
-def error_maps(GT, PW,REG, *n2n_results, output_dir = "."):
+def error_maps( *n2n_results, output_dir = ".", PW=None, REG = None,GT=None):
     
-    methods = [("Ground Truth", GT), ("Pointwise", PW), ("Regularized", REG)]
+    methods = [ ]
+
+
+    if PW is not None:
+        methods.append(("Pointwise", PW))
+            
+    if REG is not None:
+        methods.append(("Regularized", REG))
+
 
     for i, result in enumerate(n2n_results):
         method, lerRat, mBatch= list(filter(None,result[-1].split("_")))
@@ -597,7 +605,7 @@ def error_maps(GT, PW,REG, *n2n_results, output_dir = "."):
 
 
 
-def plot_training_metrics( GT,PW, REG, *n2n_results, output_dir = "."):
+def plot_training_metrics(  *n2n_results, output_dir = ".",GT=None,PW=None, REG = None):
 
     figsize = (7.5,2.5)
     methods = []
@@ -614,7 +622,7 @@ def plot_training_metrics( GT,PW, REG, *n2n_results, output_dir = "."):
     ax1.set_title('LOSS')
     ax1.legend()
 
-    plt.savefig(Path(output_dir) / f"metrics_loss.png", dpi=300, bbox_inches='tight')
+    plt.savefig(Path(output_dir) / f"metrics - loss.png", dpi=300, bbox_inches='tight')
 
     # RELCHG PLOT
     fig, (ax1) = plt.subplots(1 , 1, figsize=figsize)
@@ -624,31 +632,37 @@ def plot_training_metrics( GT,PW, REG, *n2n_results, output_dir = "."):
     ax1.set_title('RELATIVE CHANGE')
     ax1.legend()
 
-    plt.savefig(Path(output_dir) / f"metrics_relchg.png", dpi=300, bbox_inches='tight')
+    plt.savefig(Path(output_dir) / f"metrics - relchg.png", dpi=300, bbox_inches='tight')
 
     # NMSE
-    GT_combined =  np_to_torch(GT).to(DEVICE)
-    fig01, (ax1) = plt.subplots(1 , 1,  figsize=figsize)
-    ax1.axhline(y = myNMSE(GT_combined, np_to_torch(PW).to(DEVICE)), color = color_list[1], linestyle = '--' , label='PW') 
-    ax1.axhline(y = myNMSE(GT_combined, np_to_torch(REG).to(DEVICE)), color = color_list[2], linestyle = '--' , label='REG') 
-    for index, (legend_string, metrics_dict ) in enumerate(methods):
-        ax1.semilogy(metrics_dict['nmse'], label = legend_string, color = color_list[index+3] ,markevery=500 )
-    ax1.set_title('NMSE')
-    ax1.legend()
+    if GT is not None:
+        GT_combined =  np_to_torch(GT).to(DEVICE)
+        fig01, (ax1) = plt.subplots(1 , 1,  figsize=figsize)
+        if PW is not None:
+            ax1.axhline(y = myNMSE(GT_combined, np_to_torch(PW).to(DEVICE)), color = color_list[1], linestyle = '--' , label='PW') 
+        if REG is not None:
+            ax1.axhline(y = myNMSE(GT_combined, np_to_torch(REG).to(DEVICE)), color = color_list[2], linestyle = '--' , label='REG') 
+        for index, (legend_string, metrics_dict ) in enumerate(methods):
+            ax1.semilogy(metrics_dict['nmse'], label = legend_string, color = color_list[index+3] ,markevery=500 )
+        ax1.set_title('NMSE')
+        ax1.legend()
 
-    plt.savefig(Path(output_dir) / f"metrics_nmse.png", dpi=300, bbox_inches='tight')
+    plt.savefig(Path(output_dir) / f"metrics - nmse.png", dpi=300, bbox_inches='tight')
 
     # STV
     fig01, (ax1) = plt.subplots(1 , 1, figsize=figsize)
-    ax1.axhline(y = STV_op_np(GT).item(), color = color_list[0], linestyle = '--', label = 'GT') 
-    ax1.axhline(y = STV_op_np(PW), color = color_list[1], linestyle = '--' , label='PW') 
-    ax1.axhline(y = STV_op_np(REG), color = color_list[2], linestyle = '--' , label='REG') 
+    if GT is not None:
+        ax1.axhline(y = STV_op_np(GT).item(), color = color_list[0], linestyle = '--', label = 'GT') 
+    if PW is not None: 
+        ax1.axhline(y = STV_op_np(PW), color = color_list[1], linestyle = '--' , label='PW') 
+    if REG is not None:
+        ax1.axhline(y = STV_op_np(REG), color = color_list[2], linestyle = '--' , label='REG') 
     for index, (legend_string, metrics_dict ) in enumerate(methods):
         ax1.semilogy(metrics_dict['stv'], label = legend_string, color = color_list[index+3] ,markevery=500 )
     ax1.set_title('STV')
     ax1.legend()
 
-    plt.savefig(Path(output_dir) / f"metrics_stv.png", dpi=300, bbox_inches='tight')
+    plt.savefig(Path(output_dir) / f"metrics - stv.png", dpi=300, bbox_inches='tight')
 
 
 

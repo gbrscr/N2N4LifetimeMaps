@@ -171,9 +171,6 @@ plot_maps(  n2n_result,
             REG = regularized_results,
         )
 
-
-
-
 joint_plot(np.stack((pointwise_results[0],np.minimum(-1e-4,pointwise_results[1]))), (470,540),(15,17),20)
 plt.savefig(output_dir / "jointplot_pw.png", dpi=300, bbox_inches='tight')
 joint_plot(regularized_results, (470,540),(15,17),20)
@@ -182,3 +179,10 @@ joint_plot(n2n_result, (470,540),(15,17),20)
 
 plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
 
+
+# Save results as pickle files, written by Tommaso
+with open(os.path.join(output_dir, 'output_pw.pkl'), 'wb') as f:
+    pickle.dump(pointwise_results, f)
+
+with open(os.path.join(output_dir, 'output_n2n.pkl'), 'wb') as f:
+    pickle.dump(n2n_result, f)

@@ -252,5 +252,11 @@ plt.savefig(output_dir / "jointplot_n2n.png", dpi=300, bbox_inches='tight')
 
 
 
+# Save results as pickle files, 
+with open(os.path.join(output_dir, 'output_pw.pkl'), 'wb') as f:
+    pickle.dump(pointwise_results, f)
+
+with open(os.path.join(output_dir, 'output_n2n.pkl'), 'wb') as f:
+    pickle.dump(n2n_result, f)
 
 
